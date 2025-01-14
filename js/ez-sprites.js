@@ -1,4 +1,4 @@
-// v0.1.1
+// v0.1.2-nomodule
 
 let _canvas;
 let _ctx;
@@ -59,11 +59,15 @@ const SPRITES = [];
 }
 
 function getRectEdges (rect) {
+    let width = rect.nativeWidth * rect.scale;
+    let height = rect.nativeHeight * rect.scale;
     return {
         leftEdge: rect.x,
-        rightEdge: rect.x + rect.width,
+        rightEdge: rect.x + width,
         topEdge: rect.y,
-        bottomEdge: rect.y + rect.height
+        bottomEdge: rect.y + height,
+        width: width,
+        height: height
     }
 }
 
@@ -73,8 +77,9 @@ function getRectEdges (rect) {
     }
 
     let sprite = createSprite(x, y, dx, dy, color, draw, getRectEdges);
-    sprite.width = width;
-    sprite.height = height;
+    sprite.nativeWidth = width;
+    sprite.nativeHeight = height;
+    sprite.scale = 1;
     return sprite;
 }
 
@@ -85,25 +90,34 @@ function getRectEdges (rect) {
 
     const getCircleEdges = (circle) =>{
         return {
-            leftEdge: circle.x - circle.radius,
-            rightEdge: circle.x + circle.radius,
-            topEdge: circle.y - circle.radius,
-            bottomEdge: circle.y + circle.radius
+            leftEdge: circle.x - (circle.radius * circle.scale),
+            rightEdge: circle.x + (circle.radius * circle.scale),
+            topEdge: circle.y - (circle.radius * circle.scale),
+            bottomEdge: circle.y + (circle.radius * circle.scale),
+            width: circle.radius * 2,
+            height: circle.radius * 2
         }
     }
     let sprite = createSprite(x, y, dx, dy, color, draw, getCircleEdges);
-    sprite.radius = radius;
+    sprite.nativeRadius = radius;
+    sprite.radius = radius; // TODO scaling simple circle sprites
+    sprite.nativeWidth = width;
+    sprite.nativeHeight = height;
+    sprite.scale = 1;
     return sprite;
 }
 
  function createCompoundShapeRectSprite(x, y, dx, dy, scale, shapesObj, debug = false) {
     const draw = (s) => {
+        
+        _ctx.strokeStyle = "red";
+        _ctx.strokeRect(s.x, s.y, s.width, s.height);
         drawShapesObj(s.shapesObj, s.x, s.y, s.scale, debug);
     }
 
     let sprite = createSprite(x, y, dx, dy, null, draw, getRectEdges);
-    sprite.width = shapesObj.nativeWidth * scale;
-    sprite.height = shapesObj.nativeHeight * scale;
+    sprite.nativeWidth = shapesObj.nativeWidth;
+    sprite.nativeHeight = shapesObj.nativeHeight;
     sprite.scale = scale;
     sprite.shapesObj = shapesObj;
     return sprite;
@@ -131,12 +145,15 @@ function getRectEdges (rect) {
     SPRITES.forEach(s => {
         s.x += s.dx;
         s.y += s.dy;
-        s.draw(s);
+        
         const edges = s.findEdges(s);
         s.leftEdge = edges.leftEdge;
         s.rightEdge = edges.rightEdge;
         s.topEdge = edges.topEdge;
-        s.bottomEdge = edges.bottomEdge
+        s.bottomEdge = edges.bottomEdge;
+        s.width = edges.width;
+        s.height = edges.height;
+        s.draw(s);
     });
 }
 
@@ -199,6 +216,7 @@ function rectOverlapsRectY(r1, r2){
         if(debug){
             _ctx.strokeStyle = "limegreen";
             _ctx.strokeRect(originX, originY, sObj.nativeWidth * scale, sObj.nativeHeight * scale);
+            // _ctx.strokeRect(originX, originY, sObj.nativeWidth * scale, sObj.nativeHeight * scale);
         }
         sObj.shapes.forEach((s, i) => {
             if(s.type){
