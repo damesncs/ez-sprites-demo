@@ -101,9 +101,9 @@ function getRectEdges (rect) {
     let sprite = createSprite(x, y, dx, dy, color, draw, getCircleEdges);
     sprite.nativeRadius = radius;
     sprite.radius = radius; // TODO scaling simple circle sprites
-    sprite.nativeWidth = width;
-    sprite.nativeHeight = height;
-    sprite.scale = 1;
+    sprite.nativeWidth = radius * 2;
+    sprite.nativeHeight = radius * 2;
+    sprite.scale = 1;   
     return sprite;
 }
 
@@ -172,6 +172,13 @@ function rectOverlapsRectX(r1, r2){
 
 function rectOverlapsRectY(r1, r2){
     return r1.bottomEdge > r2.topEdge && r1.topEdge < r2.bottomEdge;
+}
+
+function circleOverlapsRect(c, r){
+    return circleRectangleTopEdgeAreColliding(c, r) ||
+    circleRectangleBottomEdgeAreColliding(c, r) ||
+    circleRectangleLeftEdgeAreColliding(c, r) ||
+    circleRectangleRightEdgeAreColliding(c, r);
 }
 
 // returns true if circle sprite is colliding with rectangle sprite's top edge

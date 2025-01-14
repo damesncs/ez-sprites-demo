@@ -27,7 +27,7 @@ function start() {
 
     tomatoShapes = loadObjectFromJsonById("tomato");
 
-    generateTomatoes(10);
+    generateTomatoes(100);
 
     // Load the objects which define the shapes to draw for the two versions of our ghost:
     characterRightShapes = loadObjectFromJsonById("character-right-shapes");
@@ -39,7 +39,7 @@ function start() {
     // The parameters we pass below will be used to set the properties of the sprite object.
     // We can access and change them later by referencing the property names on the `character` object.
     //                                          x    y  dx dy  scale      shapesObj        debug
-    character = createCompoundShapeRectSprite(100, 100, 0, 0, 0.2, characterRightShapes, false);
+    character = createCompoundShapeRectSprite(100, 100, 0, 0, 0.2, characterRightShapes, true);
 
     // begin drawing frames every 15 milliseconds
     setInterval(drawEachFrame, 15);
@@ -59,7 +59,6 @@ function drawEachFrame(){
     scaleCharacter();
     drawTimer();
     drawScore();
-    frameCount++;
 }
 
 
@@ -170,7 +169,8 @@ function generateTomatoes(n){
     for(let i = 0; i < n; i++){
         let x = getRandom(0, CANVAS_WIDTH);
         let y = getRandom(0, CANVAS_HEIGHT);
-        tomatoes.push(createCompoundShapeRectSprite(x, y, 0, 0, 0.1 * y * Y_TO_SCALE_RATIO, tomatoShapes, false));
+        // tomatoes.push(createCompoundShapeRectSprite(x, y, 0, 0, 0.1 * y * Y_TO_SCALE_RATIO, tomatoShapes, true));
+        tomatoes.push(createCircleSprite(x, y, 0, 0, 5 * y * Y_TO_SCALE_RATIO, "red"));
     }
 }
 
