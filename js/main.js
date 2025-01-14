@@ -39,7 +39,7 @@ function start() {
     // The parameters we pass below will be used to set the properties of the sprite object.
     // We can access and change them later by referencing the property names on the `character` object.
     //                                          x    y  dx dy  scale      shapesObj        debug
-    character = createCompoundShapeRectSprite(100, 100, 0, 0, 0.2, characterRightShapes, true);
+    character = createCompoundShapeRectSprite(100, 100, 0, 0, 0.2, characterRightShapes, false);
 
     // begin drawing frames every 15 milliseconds
     setInterval(drawEachFrame, 15);

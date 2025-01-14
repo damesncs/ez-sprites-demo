@@ -109,9 +109,9 @@ function getRectEdges (rect) {
 
  function createCompoundShapeRectSprite(x, y, dx, dy, scale, shapesObj, debug = false) {
     const draw = (s) => {
-        
-        _ctx.strokeStyle = "red";
-        _ctx.strokeRect(s.x, s.y, s.width, s.height);
+        // width / height debug for scaling / hitbox issues
+        // _ctx.strokeStyle = "red";
+        // _ctx.strokeRect(s.x, s.y, s.width, s.height);
         drawShapesObj(s.shapesObj, s.x, s.y, s.scale, debug);
     }
 
